@@ -30,7 +30,7 @@ class OutsideClickDetector extends React.PureComponent {
      * Registers an event listener so we know when to close this tooltip.
      */
     componentDidMount() {
-        document.addEventListener('mousedown', this.detectOutsideClick);
+        document.addEventListener('mousedown', this.detectOutsideClick, { capture: true });
     }
 
     /**
@@ -60,7 +60,7 @@ class OutsideClickDetector extends React.PureComponent {
      * Deregisters the event listener attached with componentDidMount()
      */
     componentWillUnmount() {
-        document.removeEventListener('mousedown', this.detectOutsideClick);
+        document.removeEventListener('mousedown', this.detectOutsideClick, { capture: true });
     }
 
     /**
