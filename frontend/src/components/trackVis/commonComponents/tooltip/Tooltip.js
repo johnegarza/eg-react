@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import { Manager, Target, Popper, Arrow } from "react-popper";
+import { Manager, Reference, Popper } from "react-popper";
 import OutsideClickDetector from "../../../OutsideClickDetector";
 
 import "./Tooltip.css";
@@ -84,20 +84,35 @@ class Tooltip extends React.PureComponent {
          */
         return ReactDOM.createPortal(
             <Manager>
-                <Target style={{ position: "absolute", left: pageX, top: pageY }} />
+                <Reference>
+                    {({ ref }) => (
+                        <div ref={ref} style={{ position: "absolute", left: pageX, top: pageY }} />
+                    )}
+                </Reference>
                 <Popper
                     placement="bottom-start"
                     modifiers={{ flip: { enabled: false } }}
-                    className="Tooltip"
-                    style={contentStyle}
-                    onMouseDown={stopEvent}
                 >
-                    <OutsideClickDetector onOutsideClick={onClose}>{children}</OutsideClickDetector>
-                    {!this.props.hideArrow && <Arrow style={ARROW_STYLE} />}
+                    {({ ref, style, placement, arrowProps }) => (
+                        <div
+                            ref={ref}
+                            style={{...style, ...contentStyle}}
+                            data-placement={placement}
+                            className="Tooltip"
+                            onMouseDown={stopEvent}
+                        >
+                            <OutsideClickDetector onOutsideClick={onClose}>{children}</OutsideClickDetector>
+                            {!this.props.hideArrow && (
+                                <div ref={arrowProps.ref} style={{...arrowProps.style, ...ARROW_STYLE}} />
+                            )}
+                        </div>
+                    )}
                 </Popper>
             </Manager>,
             document.body
         );
+
+
     }
 }
 

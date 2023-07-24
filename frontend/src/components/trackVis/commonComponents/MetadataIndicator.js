@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Manager, Target, Popper } from 'react-popper';
+import { Manager, Reference, Popper } from 'react-popper';
 import TrackModel from '../../../model/TrackModel';
 
 import './tooltip/Tooltip.css';
@@ -169,16 +169,31 @@ class ColoredBox extends React.PureComponent {
 
         return (
         <Manager>
-            <Target
-                style={boxStyle}
-                onClick={onClick}
-                onMouseEnter={this.showTooltip}
-                onMouseLeave={this.hideTooltip}
-            />
-            <Popper placement="left" className="Tooltip" style={tooltipStyle} >
-                <div className="Tooltip-minor-text">{term}:</div>
-                <div>{termValue || "(no value)"}</div>
+            <Reference>
+                {({ ref }) => (
+                    <div
+                        ref={ref}
+                        style={boxStyle}
+                        onClick={onClick}
+                        onMouseEnter={this.showTooltip}
+                        onMouseLeave={this.hideTooltip}
+                    />
+                )}
+            </Reference>
+            <Popper placement="left">
+                {({ ref, style, placement, arrowProps }) => (
+                    <div
+                        ref={ref}
+                        style={{...style, ...tooltipStyle}}
+                        data-placement={placement}
+                        className="Tooltip"
+                    >
+                        <div className="Tooltip-minor-text">{term}:</div>
+                        <div>{termValue || "(no value)"}</div>
+                    </div>
+                )}
             </Popper>
+
         </Manager>
         );
     }

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import _ from "lodash";
 import axios from "axios";
 import Autosuggest from "react-autosuggest";
-import { Manager, Target, Popper } from "react-popper";
+import { Manager, Reference, Popper } from "react-popper";
 // import SpeechRecognition from "react-speech-recognition";
 import withCurrentGenome from "../withCurrentGenome";
 import IsoformSelection from "./IsoformSelection";
@@ -151,16 +151,24 @@ class GeneSearchBoxBase extends React.PureComponent {
         let isoformPane = null;
         if (isShowingIsoforms) {
             isoformPane = (
-                <Popper placement="bottom-start" style={ISOFORM_POPOVER_STYLE}>
-                    <OutsideClickDetector onOutsideClick={() => this.setState({ isShowingIsoforms: false })}>
-                        <IsoformSelection
-                            geneName={inputValue}
-                            onGeneSelected={this.setSelectedGene}
-                            simpleMode={simpleMode}
-                            color={color}
-                            background={background}
-                        />
-                    </OutsideClickDetector>
+                <Popper placement="bottom-start">
+                    {({ ref, style, placement, arrowProps }) => (
+                        <div
+                            ref={ref}
+                            style={{...style, ...ISOFORM_POPOVER_STYLE}}
+                            data-placement={placement}
+                        >
+                            <OutsideClickDetector onOutsideClick={() => this.setState({ isShowingIsoforms: false })}>
+                                <IsoformSelection
+                                    geneName={inputValue}
+                                    onGeneSelected={this.setSelectedGene}
+                                    simpleMode={simpleMode}
+                                    color={color}
+                                    background={background}
+                                />
+                            </OutsideClickDetector>
+                        </div>
+                    )}
                 </Popper>
             );
         }

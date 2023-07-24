@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Manager, Target, Popper } from "react-popper";
+import { Manager, Reference, Popper } from "react-popper";
 import { SketchPicker } from "react-color";
 import parseColor from "parse-color";
 
@@ -91,9 +91,21 @@ class ColorPicker extends React.PureComponent {
 
         return (
             <Manager>
-                <Target>{pickerOpener}</Target>
-                <Popper placement="bottom" style={{ zIndex: 2 }}>
-                    {pickerElement}
+                <Reference>
+                    {({ ref }) => (
+                        <div ref={ref}>{pickerOpener}</div>
+                    )}
+                </Reference>
+                <Popper placement="bottom">
+                    {({ ref, style, placement, arrowProps }) => (
+                        <div
+                            ref={ref}
+                            style={{...style, zIndex: 2}}
+                            data-placement={placement}
+                        >
+                            {pickerElement}
+                        </div>
+                    )}
                 </Popper>
             </Manager>
         );
