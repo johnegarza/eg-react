@@ -195,25 +195,29 @@ class GeneSearchBoxBase extends React.PureComponent {
                 {/* {speechSearchBox} */}
                 {/* <label style={{ marginBottom: 0 }}>Gene search</label> */}
                 <Manager>
-                    <Target>
-                        <Autosuggest
-                            suggestions={suggestions}
-                            shouldRenderSuggestions={this.shouldSuggest}
-                            onSuggestionsFetchRequested={this.getSuggestions}
-                            onSuggestionsClearRequested={() => this.setState({ nameSuggestions: [] })}
-                            getSuggestionValue={_.identity}
-                            renderSuggestion={_.identity}
-                            inputProps={{
-                                placeholder: "Gene symbol",
-                                value: inputValue,
-                                onChange: this.handleInputChange,
-                                onKeyUp: this.showIsoformsIfEnterPressed,
-                            }}
-                            ref={(input) => (this.input = input)}
-                            onSuggestionSelected={this.showIsoforms}
-                            theme={theme}
-                        />
-                    </Target>
+                    <Reference>
+                        {({ ref }) => (
+                            <div ref={ref}>
+                                <Autosuggest
+                                    suggestions={suggestions}
+                                    shouldRenderSuggestions={this.shouldSuggest}
+                                    onSuggestionsFetchRequested={this.getSuggestions}
+                                    onSuggestionsClearRequested={() => this.setState({ nameSuggestions: [] })}
+                                    getSuggestionValue={_.identity}
+                                    renderSuggestion={_.identity}
+                                    inputProps={{
+                                        placeholder: "Gene symbol",
+                                        value: inputValue,
+                                        onChange: this.handleInputChange,
+                                        onKeyUp: this.showIsoformsIfEnterPressed,
+                                    }}
+                                    ref={(input) => (this.input = input)}
+                                    onSuggestionSelected={this.showIsoforms}
+                                    theme={theme}
+                                />
+                            </div>
+                        )}
+                    </Reference>
                     {isoformPane}
                 </Manager>
             </div>
